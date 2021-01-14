@@ -5,6 +5,6 @@
 
 | Assignment                                                                            	| Report 	| Weight 	| Grade 	|
 |---------------------------------------------------------------------------------------	|--------	|--------	|-------	|
-| [ Lane Detection Using Classical Computer Vision ] ( ./CarND-LaneLines-P1/README.md ) 	|        	|        	|       	|
+| [ Lane Detection Using Classical Computer Vision ]( ./CarND-LaneLines-P1/README.md ) 	  |        	|        	|       	|
 |                                                                                       	|        	|        	|       	|
 |                                                                                       	|        	|        	|       	|
