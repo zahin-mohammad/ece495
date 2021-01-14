@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/doc/configure_via_docker.md
+docker pull udacity/carnd-term1-starter-kit
+docker run -it --rm --entrypoint "/run.sh" -p 8888:8888 -v `pwd`:/src udacity/carnd-term1-starter-kit
