@@ -1,3 +1,7 @@
+# Disclaimer
+- Forked from [ here ](https://github.com/udacity/CarND-LaneLines-P1)
+- Made private for ECE-495 at UWaterloo
+
 # **Finding Lane Lines on the Road** 
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
