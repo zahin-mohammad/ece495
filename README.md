@@ -5,6 +5,6 @@
 
 | Assignment                                                                            	| Report 	| Weight 	| Grade 	|
 |---------------------------------------------------------------------------------------	|--------	|--------	|-------	|
-| [ Lane Detection Using Classical Computer Vision ]( https://github.com/zahin-mohammad/CarND-LaneLines-P1 ) 	  |        	|        	|       	|
+| [ Lane Detection Using Classical Computer Vision ]( https://github.com/zahin-mohammad/ece495/tree/main/a1 ) 	  |        	|        	|       	|
 |                                                                                       	|        	|        	|       	|
 |                                                                                       	|        	|        	|       	|
