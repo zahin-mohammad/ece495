@@ -80,8 +80,15 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        # 2 Layers (or 1 hidden layer)
+        hidden_layer = np.maximum(0, np.dot(X, W1)+b1) # ReLu activation (non-linear)
+        scores = np.dot(hidden_layer, W2)+b2        
 
+        # Softmax (turn scores to probabilities)        
+        probs = np.exp(scores)
+        # Sum across columns not rows!
+        probs = probs/np.sum(probs, axis=1, keepdims=True)
+        
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         # If the targets are not given then jump out, we're done
@@ -98,7 +105,13 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        # Large P for correct label correlates to small loss,
+        # Small P for correct label correlates to large loss
+        losses = -np.log(probs[range(N), y])
+        average_loss = np.sum(losses)/N
+        # Incentivize simpler models (to combat potential overfitting)
+        regularization_loss = reg*np.sum(W1*W1) + reg*np.sum(W2*W2)
+        loss = average_loss + regularization_loss
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -110,11 +123,36 @@ class TwoLayerNet(object):
         # grads['W1'] should store the gradient on W1, and be a matrix of same size #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        
+        # COMPUTATION GRAPH CAN BE SEEN IN ../../back_prop.png
+        # dscores is the gradient of the average loss wtr to the softmax probabilities
+        dscores = probs
+        dscores[range(N), y] -=1 
+        dscores *= 1/N
 
-        pass
+        # dW2 is the gradient of the average loss wtr to W2 
+        dW2 = np.dot(hidden_layer.T, dscores)
+        # Incentivize simpler models (to combat potential overfitting)
+        dW2 += 2*reg*W2
+        
+        # dhidden is the gradient of average loss wtr to the hidden_layer
+        dhidden = np.dot(dscores, W2.T)
+
+        # drelu is the gradient of the loss wtr to the output of x*w1+b1 
+        # (x*w1+b1 = z in the diagram)
+        drelu = dhidden
+        drelu[hidden_layer <= 0] = 0
+
+        # dW1 is the gradient of the average loss wtr to W1 
+        dW1 = np.dot(X.T, drelu)
+        # Incentivize simpler models (to combat potential overfitting)
+        dW1 += 2*reg*W1
+
+        grads['W2'] = dW2
+        grads['W1'] = dW1
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+  
         return loss, grads
 
     def train(self, X, y, X_val, y_val,
