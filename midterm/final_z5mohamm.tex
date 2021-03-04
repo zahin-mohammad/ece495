@@ -1,7 +1,5 @@
 \documentclass[
 	12pt, % Default font size, values between 10pt-12pt are allowed
-	%letterpaper, % Uncomment for US letter paper size
-	%spanish, % Uncomment for Spanish
 ]{fphw}
 
 % Template-specific packages
@@ -11,11 +9,8 @@
 \usepackage{graphicx} % Required for including images
 \usepackage{booktabs} % Required for better horizontal rules in tables
 \usepackage{listings} % Required for insertion of code
+\usepackage{amsmath}
 \usepackage[shortlabels]{enumitem}
-
-
-
-
 
 %----------------------------------------------------------------------------------------
 %	ASSIGNMENT INFORMATION
@@ -56,7 +51,7 @@ highway in traffic jams, but with a fallback-ready user. Which level(s) of drivi
 automation is this driving automation system operating at? [1 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+The driving automation system is operating at level 3.
 %----------------------------------------------------------------------------------------
 \section*{Q2. Computer Vision Fundamentals [11 marks]}
 %------------------------------------------------
@@ -66,7 +61,18 @@ following signal [0 1 3 0] (assume enough zero padding to show all non-zero outp
 		marks]
 \end{problem}
 \subsection*{Answer}
-TODO
+\[
+=
+  \begin{bmatrix}
+    0*0+2*0+1*1 & 0*0+2*1+3*1 & 0*1+2*3+1*0 & 0*3+2*0+1*0
+  \end{bmatrix}
+\]
+\[
+=
+  \begin{bmatrix}
+    1 & 5 & 6 & 0
+  \end{bmatrix}
+\]
 %------------------------------------------------
 \begin{problem}
 2b. Assume that the output of cross-correlating the 1-D filter [2 3 2] with some input
@@ -74,7 +80,14 @@ signal resulted in the following output signal [7 10 7]. What would be the outpu
 have we used convolution instead of cross-correlation and why? [1 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+There the resulting output signal is 
+\[
+=
+  \begin{bmatrix}
+    7 & 10 & 7
+  \end{bmatrix}
+\]
+The result of cross-correlation and convulsion in this instance are the same with this specific filter. This is because during convolution the filter is "flipped", but in this instance the filter is symmetric. 
 %------------------------------------------------
 \begin{problem}
 2c. What would be the result of applying this filter to an image (Hint: add the Gaussian
@@ -84,7 +97,7 @@ kernel to this filter from question 2e to recognize it)? [1 mark]Explain.
 \end{center}
 \end{problem}
 \subsection*{Answer}
-TODO
+This is a high pass filter (laplacian filter). The resulting image would only have high frequency components such as edges (the filter de-emphasizes slow varying gradients; regions without edges).
 %------------------------------------------------
 \begin{problem}
 2d. What is the name of the following filter and what is it computing? [1 mark]
@@ -93,7 +106,7 @@ TODO
 \end{center}
 \end{problem}
 \subsection*{Answer}
-TODO
+This is a DoG filter, which calculates a difference in gaussian's. The first gaussian has a max magnitude of 0.25, and the second gaussian has a max magnitude of 0.15. This shows that the first gaussian filter has a smaller $\sigma$ then the second ($\sigma_1 < \sigma_2$), therefore this is a band pass filter. 
 %------------------------------------------------
 \begin{problem}
 2e. Complete the Gaussian filter shown below by specifying the cells marked by “?”.
@@ -103,13 +116,21 @@ How did you determine the missing values? [2 marks]
 \end{center}
 \end{problem}
 \subsection*{Answer}
-TODO
+\[
+= \frac{1}{16} * 
+  \begin{bmatrix}
+    1 & 2 & 1 \\
+	2 & 4 & 2 \\
+	1 & 2 & 1 \\
+  \end{bmatrix}
+\]
+All values in the grid need to add to 16 ($\frac{1}{16}* 16 = 1$), and the matrix must by symmetric.
 %------------------------------------------------
 \begin{problem}
 2f. Why is the Canny filter using double thresholding? [1 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+The Canny filter uses double thresholding to remove unwanted edges. It does this by allowing all strong edges (above top threshold) and all weak edges (above second threshold) that also connect to a strong edge. This results in relevant continuous lines (discontinuous strong edges connected with weak edges). Anything below the lower threshold is discarded.
 %------------------------------------------------
 \begin{problem}
 2g. Consider the following representation in Hough space (polar coordinates).
@@ -121,13 +142,14 @@ TODO
 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+Each sinusoid in the Hough space correspond to a point in the input image.
 \begin{problem}
 2g.2 What is each of the black dots (sinusoid intersections) corresponding to in the input
 image (note that the horizontal axis sweeps 360 degrees)? [1 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+The first black dot refers to a line in the input image connecting three points (red, green and blue point).
+The second black dot refers to the same line but rotated 180 degrees (i.e. the same line).
 \end{problem}
 %------------------------------------------------
 \begin{problem}
@@ -143,7 +165,7 @@ TODO
 \end{enumerate}
 \end{problem}
 \subsection*{Answer}
-TODO
+Black can be represented with options 2, 5, and 6. The key is any HSV that has a low Value.
 %------------------------------------------------
 %----------------------------------------------------------------------------------------
 \section*{Q3. Machine Learning Fundamentals [21 marks]}
@@ -156,14 +178,26 @@ datapoints) is equivalent to minimizing the sum of squared errors. Hint: go via 
 log likelihood [5 marks]
 \end{problem}
 \subsection*{Answer}
-TODO
+Maximizing the likelihood is the same as maximizing the log likelihood as $ln$ is monotonic. 
+\begin{equation}
+	P(y \vert x; w_0, w_1) = \prod P(y=y^i \vert x^i; w_0, w_1)
+\end{equation}
+\begin{equation}
+	LL(y \vert x; W) = ln P(y \vert x; w_0, w_1) =  \sum^n_{i=1}ln(P(y=y^i \vert x^i; w_0, w_1))
+\end{equation}
+Maximizing log likelihood is equivalent to minimizing negative log likelihood.
+\begin{equation}
+	(w^*_0, w^*_1) = argmin(\sum^n_{i=1}-ln(P(y=y^i \vert x^i; w_0, w_1)))
+\end{equation}
 %------------------------------------------------
 \begin{problem}
 3b. What is the regression loss (as used in class) for a data point with label 0.4 and
 predicted output 0.7? [1 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+\begin{equation}
+	loss = (0.4-0.7)^2 = 0.09
+\end{equation}
 %------------------------------------------------
 \begin{problem}
 3c. (Apply what you’ve learned in lecture and Assignment 2) Given the following set of
@@ -171,14 +205,133 @@ input vector $X$, ground truth vector $Y$, and weight matrices $W_1$, $W_2$, $B_
 layer fully connected neural network, what is the inference probability of the correct
 class? What is the cross-entropy loss value? Assume ReLU activation on the first hidden
 layer and softmax activation on the output layer. Show each step of the computation.
-Hint: Use numerically stable softmax and assume $e^{-1}) \approx 0.37$ and $e^{-7}\approx 0.00$ [5
+Hint: Use numerically stable softmax and assume $e^{-1} \approx 0.37$ and $e^{-7}\approx 0.00$ [5
 		marks]
 \begin{center}
 	\includegraphics[width=0.75\columnwidth, page=1]{3c.png} % Example image
 \end{center}
 \end{problem}
 \subsection*{Answer}
-TODO
+
+\begin{equation}
+\begin{split}
+	Y &=softmax(
+		\begin{bmatrix}
+			-3	\\
+			3	\\
+			0	\\
+		\end{bmatrix}
+		+
+		\begin{bmatrix}
+			3	&	1	&	1\\
+			1	&	2	&	3\\
+			5	&	4	&	2\\
+		\end{bmatrix}
+		*
+		relu(
+			\begin{bmatrix}
+				-25	\\
+				11	\\
+				-10	\\
+			\end{bmatrix}
+			+
+			\begin{bmatrix}
+				10	& 8	\\
+				-5 	& 3	\\
+				4 	& 2	\\
+			\end{bmatrix}
+			*
+			\begin{bmatrix}
+				2	\\
+				0	\\
+			\end{bmatrix}
+		)
+	) \\
+	&=softmax(
+		\begin{bmatrix}
+			-3	\\
+			3	\\
+			0	\\
+		\end{bmatrix}
+		+
+		\begin{bmatrix}
+			3	&	1	&	1\\
+			1	&	2	&	3\\
+			5	&	4	&	2\\
+		\end{bmatrix}
+		*
+		relu(
+			\begin{bmatrix}
+				-5	\\
+				1	\\
+				-2	\\
+			\end{bmatrix}
+		)
+	)\\
+	&=softmax(
+		\begin{bmatrix}
+			-3	\\
+			3	\\
+			0	\\
+		\end{bmatrix}
+		+
+		\begin{bmatrix}
+			3	&	1	&	1\\
+			1	&	2	&	3\\
+			5	&	4	&	2\\
+		\end{bmatrix}
+		*
+		\begin{bmatrix}
+			0	\\
+			1	\\
+			0	\\
+		\end{bmatrix}
+	)\\
+	&=softmax(
+		\begin{bmatrix}
+			-2	\\
+			5	\\
+			4	\\
+		\end{bmatrix}
+	)\\
+\end{split}
+\end{equation}
+Let 
+\begin{equation}
+	A = 		
+	\begin{bmatrix}
+		-2	\\
+		5	\\
+		4	\\
+	\end{bmatrix}
+\end{equation}
+Then
+\begin{equation}
+	\begin{split}
+		Y &= softmax(A)\\
+		&= \frac{e^{A-max(A)}}{\sum^k_{j=1}e^{A_j-max(A)}}\\
+		&= \frac{1}{e^{-7}+e^{0}+e^{-1}}*
+			\begin{bmatrix}
+				e^{-7}	\\
+				e^{0}	\\
+				e^{-1}	\\
+			\end{bmatrix}\\
+		&= \frac{1}{1.37}*
+			\begin{bmatrix}
+				0.00	\\
+				1		\\
+				0.37	\\
+			\end{bmatrix}\\
+		&= 
+			\begin{bmatrix}
+				0.00	\\
+				0.73		\\
+				0.27	\\
+			\end{bmatrix}
+	\end{split}
+\end{equation}
+The inference probability of the correct class is 73\%.
+The cross entropy loss is defined as $-ln(p)$ therefore it is equal to $0.31$.
 %------------------------------------------------
 \begin{problem}
 3d. Consider the computational graph below for the following function
@@ -197,20 +350,23 @@ back to each function input). Recall
 Assume $ln(4) \approx 1.39$ [5 marks]
 \end{problem}
 \subsection*{Answer}
-TODO
+\begin{center}
+	\includegraphics[width=1\columnwidth, page=1]{3d.png} % Example image
+\end{center}
 %------------------------------------------------
 \begin{problem}
 3e. What is the difference between Stochastic Gradient Descent and ordinary (Batch)
 Gradient Descent? [1 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+Batch gradient descent computes the gradient using the entire dataset 
+whereas Stochastic gradient descent computes the gradient using either one or a subset of the dataset.
 %------------------------------------------------
 \begin{problem}
 3f. How is the condition of overfitting defined? [1 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+Overfitting is a case where the network achieves a low loss on training data, but has significantly larger loss when presented with input from the validation or test dataset. Overfitting can be seen as a failure to generalize the target function, and instead only fit to data it has already seen.
 %------------------------------------------------
 \begin{problem}
 3g. Consider a convolutional layer with an input volume of depth 4 and output volume of
@@ -218,7 +374,10 @@ depth 128. How many convolutional filters does the layer contain? What is the de
 each filter? [2 marks]
 \end{problem}
 \subsection*{Answer}
-TODO
+\begin{equation}
+	D_{out} = k,
+\end{equation}
+where $k$ is the number of filters, and $D_{out}$ is the output depth. Therefore there are $k=128$ convolutional filters. The depth of each convultional filter is 4 to match the input depth.
 %----------------------------------------------------------------------------------------
 \section*{Q4. Semantic Segmentation [2 marks]}
 %------------------------------------------------
@@ -229,14 +388,14 @@ extractor to the corresponding-size upsampled maps in the decoder. What is the r
 these connections? [1 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+Skip connections in semantic segmentation provides higher (deeper) layers in the neural network access to lower level features. Additionally, skip connections improve gradient flow in deep neural networks (mitigate the vanishing gradient problem) which leads to improved convergence.
 \begin{problem}
 4b. (Assignment 3) You were recommended to use batch norm as part of your network.
 Given a layer with the linear transformation and an activation function, where is the batch
 norm operation normally applied? [1 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+The batch normalization happens after the linear transformation and before the activation function.
 %----------------------------------------------------------------------------------------
 \section*{Q5. Object Detection [9 marks] }
 %------------------------------------------------
@@ -245,7 +404,7 @@ TODO
 What is the maximum number of objects that the detector can detect? [1 mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+The detector can detect $5*5*3 = 75$ objects.
 \begin{problem}
 5b. On a test set with a total of 4 of cars in the ground truth, a detector produced 3
 bounding boxes with the following (score, IoU): (0.5,0.7), (0.7,0.8), (0.9, 0.2) (assume
@@ -254,7 +413,15 @@ score threshold of 0.6 and IoU threshold of 0.6, specify the number of TP, FP, a
 		marks]
 \end{problem}
 \subsection*{Answer}
-TODO
+\begin{equation}
+	TP = count[(0.7,0.8)] = 1
+\end{equation}
+\begin{equation}
+	FP = count[(0.9,0.2)] = 1
+\end{equation}
+\begin{equation}
+	FN = \#ground\_truths - TP = 4-1 = 3
+\end{equation}
 \begin{problem}
 5c. (Assignment 4) Consider the figure below, which shows the bounding boxes
 predicted by a network (before non-maximum suppression). With an IoU threshold of 0.5
@@ -265,16 +432,17 @@ suppression? Explain your reasoning. [3 marks]
 \end{center}
 \end{problem}
 \subsection*{Answer}
-TODO
+In this example, no bounding boxes are removed for their score as they are all $\ge 0.2$.
+NMS is applied per class. Looking at the cyclist bounding boxes there are no overlaps with other cyclist bounding boxes, therefore it is not removed. The person classes visually do not have an $IoU \ge 0.5$ therefore they are not removed. For the car class, the car with a score of 0.4 and 0.8 overlap by more than 50\%, therefore the larger score car will remain will removing the lower score one. The car with a score of 0.6 is not overlapping with any other car class, therefore it is not removed. In total there are 5 bounding boxes left after non-maximal suppression.
 \begin{problem}
 5d. How is it possible for two different bounding boxes to be generated for the same
 object (before non-maximum suppression)? [1mark]
 \end{problem}
 \subsection*{Answer}
-TODO
+Each anchor box can have a detection, and as they overlap, it is possible for overlapping anchor boxes to detect the same object given that they have sufficient IoU and score. If an object fills up most of a grid-square, then likely most of the anchor boxes for that grid square will generate a bounding box for the same object.
 \begin{problem}
 5e. Which of the statements is correct? [1mark]
-\begin{enumerate}[a)] % a), b), c), ...
+\begin{enumerate}[a)] 
 	\item An output neuron in an object detector is influenced only by input pixels within
 	      the anchor box assigned to it.
 	\item An output neuron in an object detector is influenced only by input pixels within
@@ -284,6 +452,6 @@ TODO
 \end{enumerate}
 \end{problem}
 \subsection*{Answer}
-TODO
+The correct answer is c, an output neuron in an object detector is influenced only by input pixels within its empirical receptive field.
 
 \end{document}
