@@ -34,7 +34,6 @@ bool isLaneFree(
 {
   if (new_lane > MAX_LANE || new_lane < MIN_LANE)
     return false;
-  // Find ref_v to use
   for (int i = 0; i < sensor_fusion.size(); i++)
   {
     // Check if the car is in the same lane as the new lane
@@ -46,13 +45,13 @@ bool isLaneFree(
       double check_speed = sqrt(vx * vx + vy * vy);
       double check_car_s = sensor_fusion[i][5];
       // Calculate the check_car's future location
-      check_car_s += (double)prev_size * 0.02 * check_speed;
+      check_car_s += (double)prev_size * INTERVAL * check_speed;
 
-      // If the check_car is within 30 meters in front, reduce ref_vel so that we don't hit it
-      if (check_car_s > car_s && (check_car_s - car_s) < 30)
+      // If the check_car is within 15 meters in front, reduce ref_vel so that we don't hit it
+      if (check_car_s > car_s && (check_car_s - car_s) < WAYPOINT_SPACING / 2)
         return false;
       // If we are switching lanes, we need to check out blind spot ;)
-      if (car_lane != new_lane && car_s > check_car_s && (car_s - check_car_s) < 30)
+      if (car_lane != new_lane && car_s > check_car_s && (car_s - check_car_s) < WAYPOINT_SPACING / 6)
         return false;
     }
   }
@@ -97,14 +96,12 @@ int main()
 
   // Start in lane 1, which is the center lane (0 is left and 2 is right)
   int lane = 1;
-  // Keeps track of if the car wants to move to a lane but can't
-  int want_lane = -1;
   // Start at zero velocity and gradually accelerate
   double ref_vel = 0.0; // mph
 
   h.onMessage([&map_waypoints_x, &map_waypoints_y, &map_waypoints_s,
-               &map_waypoints_dx, &map_waypoints_dy, &ref_vel, &lane, &want_lane](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
-                                                                                  uWS::OpCode opCode) {
+               &map_waypoints_dx, &map_waypoints_dy, &ref_vel, &lane](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
+                                                                      uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
