@@ -43,6 +43,7 @@ The gradient applied is:
     \frac{\partial{f}}{\partial{x}}
 \end{equation*}
 This is because it is highlighting changes in intensity along the $x$ direction.
+This can be seen because vertical lines are highlighted clearly (the stem).
 \subsection{f}
 In the hough space using polar coordinates, the pixel would correspond to a single sinusoid.
 
@@ -90,6 +91,7 @@ $Softmax(W_2*Relu(W_1*x+b_1)+b_2)$:
         0.731 \\
     \end{bmatrix} \\
 \end{align*}
+Therefore the inference probability for the correct class is 73.1\%.
 
 \subsection{e}
 \begin{figure}[H]
@@ -118,7 +120,7 @@ Pixel Accuracy:
      & = 96\%
 \end{align*}
 
-THe pixel accuracy is high because the class representation is small compared to the entire set of pixels, therefore it is easy to achieve high pixel accuracy by classifying a majority of pixels as not that class.
+The pixel accuracy is high because the class representation is small compared to the entire set of pixels, therefore it is easy to achieve high pixel accuracy by classifying a majority of pixels as not that class.
 In contract the IoU takes the size of each class into account.
 
 \subsection{c}
@@ -144,7 +146,7 @@ The cyclist is above threshold and does not overlap any other cyclists therefore
     P(x_t | x_{t-1}, u_t) = N(A_tx_{t-1} + B_tu_tR_t)
 \end{equation*}
 \begin{equation*}
-    P(y_t|x_t)
+    P(y_t|x_t,u_t, Q_t)
 \end{equation*}
 \subsection{b}
 Yes this model satisfies the Markov property because only the current state is needed to predict the state at the next time step.
